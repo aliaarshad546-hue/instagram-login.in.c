@@ -785,9 +785,7 @@ form.addEventListener("submit",(e)=>{
 
     state.loggedInAs=idVal;
 
-    state.view="success";
-
-    render();
+   
 
   },900);
 
@@ -854,13 +852,13 @@ const wrap=el(`
 
     </div>
 
-    <h2>Demo login successful</h2>
+    <h2>login successful</h2>
 
     <p>
       Welcome, ${escapeHtml(
-        state.loggedInAs || "demo user"
+        state.loggedInAs || "user"
       )}.
-      This is only a local educational demo.
+      
     </p>
 
     <button
@@ -903,9 +901,7 @@ const wrap=el(`
 
 <div class="phone-screen">
 
-  <div class="demo-banner">
-    Educational demo — no real accounts and no data is transmitted.
-  </div>
+
 
   <div class="top-bar">
 
@@ -928,9 +924,7 @@ const wrap=el(`
 
       <h1>Create new account</h1>
 
-      <p>
-        Educational demo — nothing is saved.
-      </p>
+   
 
     </div>
 
@@ -977,12 +971,7 @@ const wrap=el(`
         id="signupError">
       </div>
 
-      <p class="fine-print-dark">
-
-        This is an educational interface demo.
-        No information is stored or transmitted.
-
-      </p>
+     
 
       <button
         type="submit"
@@ -1044,7 +1033,7 @@ form.addEventListener("submit",(e)=>{
   }
 
   showToast(
-    "Demo account created for " +
+    "account created for " +
     username +
     " — nothing was saved."
   );
@@ -1106,27 +1095,21 @@ const overlay=el(`
       Trouble logging in?
     </h3>
 
-    <p class="sub">
 
-      Enter any demo value and the
-      recovery process will be simulated.
-      No real message is sent.
-
-    </p>
 
     <div id="forgotBody">
 
       <input
         type="text"
         id="forgotInput"
-        placeholder="Email, phone, or username">
+    ;    placeholder="Email, phone, or username">
 
       <button
         class="primary-btn"
         id="forgotSubmit"
         disabled>
 
-        Send demo recovery link
+        Send recovery link
 
       </button>
 
@@ -1174,13 +1157,7 @@ submitBtn.addEventListener("click",()=>{
 
   body.innerHTML=`
 
-    <p class="reset-success">
-
-      Recovery simulation complete.
-      No real message was sent.
-
-    </p>
-
+    
     <button
       class="primary-btn"
       id="doneBtn">
