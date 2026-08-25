@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo App — Educational Demo</title>
+
+<style>
+:root{
+  --bg:#000;
+  --border:#363636;
+  --text-primary:#fff;
+  --text-secondary:#a8a8a8;
+  --accent:#0095f6;
+  --accent-disabled:rgba(0,149,246,.5);
+  --error:#ed4956;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+  Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text-primary);
+  min-height:100%;
+}
+
+.phone-screen{
+  min-height:100vh;
+  width:100%;
+  max-width:470px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:14px 24px 24px;
+}
+
+.top-bar{
+  width:100%;
+  display:flex;
+  align-items:center;
+}
+
+.back-btn{
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+  padding:10px;
+  margin-left:-10px;
+}
+
+.lang-selector{
+  background:none;
+  border:none;
+  color:var(--text-secondary);
+  font-size:15px;
+  margin-top:20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+}
+
+.lang-selector .chev{
+  font-size:11px;
+  margin-top:2px;
+}
+
+.logo-wrap{
+  margin:48px 0 56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Educational demo camera logo */
+.logo-icon{
+  width:92px;
+  height:92px;
+  display:block;
+}
+
+form{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.field-dark{
+  position:relative;
+}
+
+.field-dark input{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text-primary);
+  font-size:16px;
+  padding:16px 44px 16px 14px;
+  outline:none;
+}
+
+.field-dark input::placeholder{
+  color:var(--text-secondary);
+}
+
+.field-dark input:focus{
+  border-color:#787878;
+}
+
+.field-dark.no-toggle input{
+  padding-right:14px;
+}
+
+.toggle-visibility-dark{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  color:var(--text-secondary);
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  padding:4px;
+}
+
+.error-text-dark{
+  color:var(--error);
+  font-size:13px;
+  text-align:center;
+  min-height:0;
+}
+
+.login-btn-dark{
+  margin-top:4px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:28px;
+  font-size:16px;
+  font-weight:700;
+  padding:15px 0;
+  cursor:pointer;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.login-btn-dark:disabled{
+  background:var(--accent-disabled);
+  cursor:default;
+}
+
+.spinner-dark{
+  width:18px;
+  height:18px;
+  border:2px solid rgba(255,255,255,.5);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.forgot-link-dark{
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  margin-top:22px;
+  cursor:pointer;
+  padding:6px;
+}
+
+.spacer{
+  flex:1;
+  min-height:32px;
+}
+
+.create-account-btn{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  border-radius:28px;
+  font-size:16px;
+  font-weight:700;
+  padding:14px 0;
+  cursor:pointer;
+  margin-bottom:22px;
+}
+
+.meta-wordmark{
+  color:var(--text-secondary);
+  font-size:14px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding-bottom:6px;
+}
+
+.meta-wordmark svg{
+  width:16px;
+  height:16px;
+}
+
+.demo-banner{
+  background:#1a1a1a;
+  border:1px solid #363636;
+  color:#c9c9c9;
+  font-size:11.5px;
+  text-align:center;
+  padding:7px 12px;
+  width:100%;
+  margin-bottom:2px;
+}
+
+/* Success */
+.success-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+
+.success-check{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:24px;
+}
+
+.success-check svg{
+  width:30px;
+  height:30px;
+}
+
+.success-state h2{
+  font-size:19px;
+  margin:0 0 10px;
+}
+
+.success-state p{
+  font-size:14px;
+  color:var(--text-secondary);
+  margin:0 0 26px;
+  max-width:280px;
+}
+
+.logout-btn{
+  background:#262626;
+  border:none;
+  border-radius:28px;
+  padding:12px 28px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* Signup */
+.signup-screen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+}
+
+.signup-header{
+  margin-top:36px;
+  margin-bottom:28px;
+  text-align:center;
+}
+
+.signup-header .logo-icon{
+  width:64px;
+  height:64px;
+  margin-bottom:20px;
+}
+
+.signup-header h1{
+  font-size:20px;
+  margin:0 0 6px;
+}
+
+.signup-header p{
+  font-size:14px;
+  color:var(--text-secondary);
+  margin:0;
+}
+
+.fine-print-dark{
+  font-size:12px;
+  color:var(--text-secondary);
+  text-align:center;
+  margin:14px 0 4px;
+  line-height:1.4;
+}
+
+.signup-btn-dark{
+  margin-top:6px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:28px;
+  font-size:16px;
+  font-weight:700;
+  padding:15px 0;
+  cursor:pointer;
+  width:100%;
+}
+
+.back-to-login-link{
+  background:none;
+  border:none;
+  color:var(--accent);
+  font-size:15px;
+  font-weight:600;
+  margin:24px auto 8px;
+  cursor:pointer;
+  display:block;
+}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal{
+  background:#1c1c1c;
+  border:1px solid #2a2a2a;
+  border-radius:14px;
+  width:100%;
+  max-width:380px;
+  padding:28px 22px 22px;
+  position:relative;
+  text-align:center;
+  color:#fff;
+}
+
+.modal-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  background:none;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--text-secondary);
+}
+
+.modal h3{
+  margin:0 0 8px;
+  font-size:19px;
+}
+
+.modal p.sub{
+  font-size:13.5px;
+  color:var(--text-secondary);
+  margin:0 0 18px;
+  line-height:1.45;
+}
+
+.modal input{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:#fff;
+  font-size:14px;
+  padding:12px;
+  outline:none;
+  margin-bottom:14px;
+}
+
+.modal input::placeholder{
+  color:var(--text-secondary);
+}
+
+.modal .primary-btn{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:24px;
+  font-size:14px;
+  font-weight:700;
+  padding:11px 0;
+  width:100%;
+  cursor:pointer;
+}
+
+.modal .primary-btn:disabled{
+  background:var(--accent-disabled);
+}
+
+.modal .demo-tag{
+  display:inline-block;
+  background:#2a2a2a;
+  color:var(--text-secondary);
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.04em;
+  padding:3px 9px;
+  border-radius:10px;
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+
+.modal .reset-success{
+  font-size:14px;
+  margin:6px 0 16px;
+}
+
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#262626;
+  color:#fff;
+  padding:12px 20px;
+  border-radius:8px;
+  font-size:13px;
+  max-width:90vw;
+  text-align:center;
+  z-index:200;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<script>
+(function(){
+
+const app=document.getElementById("app");
+
+let state={
+  view:"login",
+  passwordVisible:false,
+  loading:false,
+  identifier:"",
+  password:"",
+  loggedInAs:""
+};
+
+function render(){
+
+  app.innerHTML="";
+
+  if(state.view==="login")
+    app.appendChild(renderLogin());
+
+  if(state.view==="success")
+    app.appendChild(renderSuccess());
+
+  if(state.view==="signup")
+    app.appendChild(renderSignup());
+}
+
+function el(html){
+
+  const t=document.createElement("template");
+
+  t.innerHTML=html.trim();
+
+  return t.content.firstElementChild;
+}
+
+
+/* =========================
+   DEMO CAMERA LOGO
+========================= */
+
+function cameraLogoSVG(size){
+
+return `
+<svg class="logo-icon"
+     width="${size}"
+     height="${size}"
+     viewBox="0 0 100 100"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-label="Demo camera logo">
+
+  <defs>
+
+    <linearGradient
+      id="demo-gradient-${size}"
+      x1="5%"
+      y1="95%"
+      x2="95%"
+      y2="5%">
+
+      <stop offset="0%" stop-color="#ffd600"/>
+      <stop offset="25%" stop-color="#ff7a00"/>
+      <stop offset="50%" stop-color="#ff0069"/>
+      <stop offset="75%" stop-color="#c135c8"/>
+      <stop offset="100%" stop-color="#5851db"/>
+
+    </linearGradient>
+
+  </defs>
+
+  <rect
+    x="5"
+    y="5"
+    width="90"
+    height="90"
+    rx="25"
+    fill="url(#demo-gradient-${size})"/>
+
+  <rect
+    x="25"
+    y="25"
+    width="50"
+    height="50"
+    rx="15"
+    fill="none"
+    stroke="#fff"
+    stroke-width="5"/>
+
+  <circle
+    cx="50"
+    cy="50"
+    r="13"
+    fill="none"
+    stroke="#fff"
+    stroke-width="5"/>
+
+  <circle
+    cx="68"
+    cy="32"
+    r="4"
+    fill="#fff"/>
+
+</svg>
+`;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+function renderLogin(){
+
+const wrap=el(`
+
+<div class="phone-screen">
+
+  <div class="demo-banner">
+    Educational demo — no real accounts and no data is transmitted.
+  </div>
+
+  <div class="top-bar">
+
+    <button
+      class="back-btn"
+      id="backBtn"
+      aria-label="Back">
+      &#8592;
+    </button>
+
+  </div>
+
+  <button
+    class="lang-selector"
+    id="langBtn">
+
+    English (UK)
+    <span class="chev">&#9662;</span>
+
+  </button>
+
+  <div class="logo-wrap">
+
+    ${cameraLogoSVG(92)}
+
+  </div>
+
+  <form novalidate>
+
+    <div class="field-dark no-toggle">
+
+      <input
+        type="text"
+        id="identifier"
+        autocomplete="off"
+        placeholder="Username, email address or mobile number">
+
+    </div>
+
+    <div class="field-dark">
+
+      <input
+        type="password"
+        id="password"
+        autocomplete="off"
+        placeholder="Password">
+
+      <button
+        type="button"
+        class="toggle-visibility-dark"
+        id="toggleVis">
+
+        Show
+
+      </button>
+
+    </div>
+
+    <div
+      class="error-text-dark"
+      id="errorText">
+    </div>
+
+    <button
+      type="submit"
+      class="login-btn-dark"
+      id="loginBtn">
+
+      Log in
+
+    </button>
+
+  </form>
+
+  <button
+    class="forgot-link-dark"
+    id="forgotBtn"
+    type="button">
+
+    Forgotten password?
+
+  </button>
+
+  <div class="spacer"></div>
+
+  <button
+    class="create-account-btn"
+    id="gotoSignup"
+    type="button">
+
+    Create new account
+
+  </button>
+
+  <div class="meta-wordmark">
+
+    <svg
+      viewBox="0 0 100 60"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+
+      <path
+        d="M20 15 C5 15 5 45 20 45
+        C32 45 35 30 50 30
+        C65 30 68 45 80 45
+        C95 45 95 15 80 15
+        C68 15 65 30 50 30
+        C35 30 32 15 20 15 Z"
+        stroke="#a8a8a8"
+        stroke-width="7"/>
+
+    </svg>
+
+    Meta
+
+  </div>
+
+</div>
+
+`);
+
+const identifierInput=wrap.querySelector("#identifier");
+const passwordInput=wrap.querySelector("#password");
+const errorText=wrap.querySelector("#errorText");
+const loginBtn=wrap.querySelector("#loginBtn");
+const toggleVis=wrap.querySelector("#toggleVis");
+const form=wrap.querySelector("form");
+
+identifierInput.value=state.identifier;
+passwordInput.value=state.password;
+
+identifierInput.addEventListener("input",()=>{
+
+  state.identifier=identifierInput.value;
+
+  updateButtonState();
+
+});
+
+passwordInput.addEventListener("input",()=>{
+
+  state.password=passwordInput.value;
+
+  updateButtonState();
+
+});
+
+function updateButtonState(){
+
+  const filled=
+    identifierInput.value.trim().length>0 &&
+    passwordInput.value.length>0;
+
+  loginBtn.disabled=!filled || state.loading;
+}
+
+updateButtonState();
+
+toggleVis.addEventListener("click",()=>{
+
+  state.passwordVisible=!state.passwordVisible;
+
+  passwordInput.type=
+    state.passwordVisible ? "text" : "password";
+
+  toggleVis.textContent=
+    state.passwordVisible ? "Hide" : "Show";
+
+  passwordInput.focus();
+
+});
+
+form.addEventListener("submit",(e)=>{
+
+  e.preventDefault();
+
+  errorText.textContent="";
+
+  const idVal=identifierInput.value.trim();
+  const pwVal=passwordInput.value;
+
+  if(!idVal || !pwVal){
+
+    errorText.textContent=
+      "Please fill in both fields to continue.";
+
+    return;
+  }
+
+  state.loading=true;
+
+  loginBtn.disabled=true;
+
+  loginBtn.innerHTML=
+    '<span class="spinner-dark"></span>';
+
+  setTimeout(()=>{
+
+    state.loading=false;
+
+    state.loggedInAs=idVal;
+
+    state.view="success";
+
+    render();
+
+  },900);
+
+});
+
+wrap.querySelector("#backBtn")
+.addEventListener("click",()=>{
+
+  showToast(
+    "Back — educational demo only."
+  );
+
+});
+
+wrap.querySelector("#langBtn")
+.addEventListener("click",()=>{
+
+  showToast(
+    "Language selection — educational demo only."
+  );
+
+});
+
+wrap.querySelector("#forgotBtn")
+.addEventListener("click",openForgotModal);
+
+wrap.querySelector("#gotoSignup")
+.addEventListener("click",()=>{
+
+  state.view="signup";
+
+  render();
+
+});
+
+return wrap;
+
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+function renderSuccess(){
+
+const wrap=el(`
+
+<div class="phone-screen">
+
+  <div class="demo-banner">
+    Educational demo — no real accounts and no data is transmitted.
+  </div>
+
+  <div class="success-state">
+
+    <div class="success-check">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none">
+
+        <path
+          d="M5 13l4 4L19 7"
+          stroke="#fff"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+      </svg>
+
+    </div>
+
+    <h2>Demo login successful</h2>
+
+    <p>
+      Welcome, ${escapeHtml(
+        state.loggedInAs || "demo user"
+      )}.
+      This is only a local educational demo.
+    </p>
+
+    <button
+      class="logout-btn"
+      id="logoutBtn">
+
+      Log out
+
+    </button>
+
+  </div>
+
+</div>
+
+`);
+
+wrap.querySelector("#logoutBtn")
+.addEventListener("click",()=>{
+
+  state.identifier="";
+  state.password="";
+  state.view="login";
+
+  render();
+
+});
+
+return wrap;
+
+}
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+function renderSignup(){
+
+const wrap=el(`
+
+<div class="phone-screen">
+
+  <div class="demo-banner">
+    Educational demo — no real accounts and no data is transmitted.
+  </div>
+
+  <div class="top-bar">
+
+    <button
+      class="back-btn"
+      id="backToLogin"
+      aria-label="Back">
+
+      &#8592;
+
+    </button>
+
+  </div>
+
+  <div class="signup-screen">
+
+    <div class="signup-header">
+
+      ${cameraLogoSVG(64)}
+
+      <h1>Create new account</h1>
+
+      <p>
+        Educational demo — nothing is saved.
+      </p>
+
+    </div>
+
+    <form novalidate>
+
+      <div class="field-dark no-toggle">
+
+        <input
+          type="text"
+          id="s-email"
+          placeholder="Mobile number or email">
+
+      </div>
+
+      <div class="field-dark no-toggle">
+
+        <input
+          type="text"
+          id="s-fullname"
+          placeholder="Full name">
+
+      </div>
+
+      <div class="field-dark no-toggle">
+
+        <input
+          type="text"
+          id="s-username"
+          placeholder="Username">
+
+      </div>
+
+      <div class="field-dark">
+
+        <input
+          type="password"
+          id="s-password"
+          placeholder="Password">
+
+      </div>
+
+      <div
+        class="error-text-dark"
+        id="signupError">
+      </div>
+
+      <p class="fine-print-dark">
+
+        This is an educational interface demo.
+        No information is stored or transmitted.
+
+      </p>
+
+      <button
+        type="submit"
+        class="signup-btn-dark">
+
+        Sign up
+
+      </button>
+
+    </form>
+
+    <button
+      class="back-to-login-link"
+      id="backToLogin2"
+      type="button">
+
+      Have an account? Log in
+
+    </button>
+
+  </div>
+
+</div>
+
+`);
+
+const emailInput=wrap.querySelector("#s-email");
+const fullnameInput=wrap.querySelector("#s-fullname");
+const usernameInput=wrap.querySelector("#s-username");
+const passwordInput=wrap.querySelector("#s-password");
+const signupError=wrap.querySelector("#signupError");
+const form=wrap.querySelector("form");
+
+form.addEventListener("submit",(e)=>{
+
+  e.preventDefault();
+
+  signupError.textContent="";
+
+  const email=emailInput.value.trim();
+  const fullname=fullnameInput.value.trim();
+  const username=usernameInput.value.trim();
+  const password=passwordInput.value;
+
+  if(!email || !fullname || !username || !password){
+
+    signupError.textContent=
+      "Please fill in all fields.";
+
+    return;
+  }
+
+  if(password.length<6){
+
+    signupError.textContent=
+      "Password must be at least 6 characters.";
+
+    return;
+  }
+
+  showToast(
+    "Demo account created for " +
+    username +
+    " — nothing was saved."
+  );
+
+  state.view="login";
+
+  render();
+
+});
+
+wrap.querySelector("#backToLogin")
+.addEventListener("click",()=>{
+
+  state.view="login";
+
+  render();
+
+});
+
+wrap.querySelector("#backToLogin2")
+.addEventListener("click",()=>{
+
+  state.view="login";
+
+  render();
+
+});
+
+return wrap;
+
+}
+
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+
+function openForgotModal(){
+
+const overlay=el(`
+
+<div class="modal-overlay">
+
+  <div class="modal">
+
+    <button
+      class="modal-close"
+      id="closeModal">
+
+      &times;
+
+    </button>
+
+    <div class="demo-tag">
+      Demo only
+    </div>
+
+    <h3>
+      Trouble logging in?
+    </h3>
+
+    <p class="sub">
+
+      Enter any demo value and the
+      recovery process will be simulated.
+      No real message is sent.
+
+    </p>
+
+    <div id="forgotBody">
+
+      <input
+        type="text"
+        id="forgotInput"
+        placeholder="Email, phone, or username">
+
+      <button
+        class="primary-btn"
+        id="forgotSubmit"
+        disabled>
+
+        Send demo recovery link
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+`);
+
+document.body.appendChild(overlay);
+
+const input=
+  overlay.querySelector("#forgotInput");
+
+const submitBtn=
+  overlay.querySelector("#forgotSubmit");
+
+input.addEventListener("input",()=>{
+
+  submitBtn.disabled=
+    input.value.trim().length===0;
+
+});
+
+overlay.querySelector("#closeModal")
+.addEventListener("click",()=>{
+
+  overlay.remove();
+
+});
+
+overlay.addEventListener("click",(e)=>{
+
+  if(e.target===overlay)
+    overlay.remove();
+
+});
+
+submitBtn.addEventListener("click",()=>{
+
+  const body=
+    overlay.querySelector("#forgotBody");
+
+  body.innerHTML=`
+
+    <p class="reset-success">
+
+      Recovery simulation complete.
+      No real message was sent.
+
+    </p>
+
+    <button
+      class="primary-btn"
+      id="doneBtn">
+
+      Done
+
+    </button>
+
+  `;
+
+  body.querySelector("#doneBtn")
+    .addEventListener("click",()=>{
+
+      overlay.remove();
+
+    });
+
+});
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer=null;
+
+function showToast(msg){
+
+  const existing=
+    document.querySelector(".toast");
+
+  if(existing)
+    existing.remove();
+
+  const toast=
+    el(`<div class="toast">
+      ${escapeHtml(msg)}
+    </div>`);
+
+  document.body.appendChild(toast);
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+
+    toast.remove();
+
+  },3200);
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(str){
+
+  const d=
+    document.createElement("div");
+
+  d.textContent=str;
+
+  return d.innerHTML;
+
+}
+
+
+render();
+
+})();
+</script>
+
+</body>
+</html>
